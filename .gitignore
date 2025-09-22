@@ -1,0 +1,7 @@
+venv/
+MLOps_Project_06.egg-info/
+Workflow.docx
+~$rkflow.docx
+logs/
+mlruns/
+artifacts/
