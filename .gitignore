@@ -4,4 +4,6 @@ Workflow.docx
 ~$rkflow.docx
 logs/
 mlruns/
-artifacts/
+artifacts/raw/
+artifacts/processed/
+artifacts/models/
