@@ -41,7 +41,7 @@ pipeline {
 
         stage('Building and Pushing Docker Image to GCR') {
             steps {
-                withCredentials([file(credentialsId: 'gcp-Jenkins-auth', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                withCredentials([file(credentialsId: 'gcp-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     script {
                         echo 'Building and Pushing Docker Image to GCR.............'
                         sh '''
@@ -65,7 +65,7 @@ pipeline {
 
         stage('Train Model') {
             steps {
-                withCredentials([file(credentialsId: 'gcp-Jenkins-auth', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                withCredentials([file(credentialsId: 'gcp-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     script {
                         echo 'Running Training Pipeline............'
                         sh '''
