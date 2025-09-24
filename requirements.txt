@@ -9,3 +9,4 @@ flask
 lightgbm
 comet-ml
 dvc
+dvc-gs

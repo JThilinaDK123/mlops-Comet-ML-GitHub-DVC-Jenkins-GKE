@@ -1,0 +1,4 @@
+[core]
+    remote = myremotedvc
+['remote "myremotedvc"']
+    url = gs://thilina-dvc-bucket/
