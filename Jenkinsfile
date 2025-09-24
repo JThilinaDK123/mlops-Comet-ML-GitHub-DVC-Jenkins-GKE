@@ -5,7 +5,7 @@ pipeline {
         VENV_DIR   = 'venv'
         GCP_PROJECT = "mlops-thilina"
         GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
-        IMAGE_NAME  = "gcr.io/${GCP_PROJECT}/ml-project-new:latest"
+        IMAGE_NAME  = "gcr.io/${GCP_PROJECT}/ml-project-06:latest"
     }
 
     stages {
@@ -80,7 +80,7 @@ pipeline {
 
         stage('Deploy to Google Cloud Run'){
             steps{
-                withCredentials([file(credentialsId: 'gcp-Jenkins-auth' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
+                withCredentials([file(credentialsId: 'gcp-json-key' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
                     script{
                         echo 'Deploy to Google Cloud Run.............'
                         sh '''
@@ -90,8 +90,8 @@ pipeline {
 
                         gcloud config set project ${GCP_PROJECT}
 
-                        gcloud run deploy ml-project-new \
-                            --image=gcr.io/${GCP_PROJECT}/ml-project-new:latest \
+                        gcloud run deploy ml-project-06 \
+                            --image=gcr.io/${GCP_PROJECT}/ml-project-06:latest \
                             --platform=managed \
                             --region=us-central1 \
                             --allow-unauthenticated 
