@@ -49,7 +49,7 @@ pipeline {
                         sh '''
                         export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
                         . ${VENV_DIR}/bin/activate
-                        dvc pull
+                        dvc pull --force
                         '''
                     }
                 }
