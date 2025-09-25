@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mlops-app-project-06
-        image: us-central1-docker.pkg.dev/mlops-thilina/mlops-project/mlops-app-project-06:latest
+        image: gcr.io/mlops-thilina/mlops-app-project-06:latest
         ports:
         - containerPort: 8080
 
