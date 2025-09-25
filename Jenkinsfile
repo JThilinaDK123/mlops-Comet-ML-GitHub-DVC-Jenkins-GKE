@@ -5,7 +5,8 @@ pipeline {
         VENV_DIR   = 'venv'
         GCP_PROJECT = "mlops-thilina"
         GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
-        IMAGE_NAME  = "gcr.io/${GCP_PROJECT}/ml-project-06:latest"
+        KUBECTL_AUTH_PLUGIN = "/usr/lib/google-cloud-sdk/bin"
+        IMAGE_NAME  = "us-central1-docker.pkg.dev/mlops-thilina/mlops-project/mlops-app-project-06:latest"
     }
 
     stages {
@@ -34,7 +35,23 @@ pipeline {
                     . ${VENV_DIR}/bin/activate
                     pip install --upgrade pip
                     pip install -e .
+                    pip install dvc
                     '''
+                }
+            }
+        }
+
+        stage('DVC Pull') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    script {
+                        echo 'DVC Pull............'
+                        sh '''
+                        export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+                        . ${VENV_DIR}/bin/activate
+                        dvc pull
+                        '''
+                    }
                 }
             }
         }
@@ -63,39 +80,33 @@ pipeline {
             }
         }
 
-        stage('Train Model') {
-            steps {
-                withCredentials([file(credentialsId: 'gcp-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                    script {
-                        echo 'Running Training Pipeline............'
-                        sh '''
-                        export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-                        . ${VENV_DIR}/bin/activate
-                        python pipeline/training_pipeline.py
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Train Model') {
+        //     steps {
+        //         withCredentials([file(credentialsId: 'gcp-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+        //             script {
+        //                 echo 'Running Training Pipeline............'
+        //                 sh '''
+        //                 export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+        //                 . ${VENV_DIR}/bin/activate
+        //                 python pipeline/training_pipeline.py
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Deploy to Google Cloud Run'){
+        stage('Deploy to Google Kubernetes Engine') {
             steps{
                 withCredentials([file(credentialsId: 'gcp-json-key' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
                     script{
-                        echo 'Deploy to Google Cloud Run.............'
+                        echo 'Deploy to Google Kubernetes Engine.............'
                         sh '''
-                        export PATH=$PATH:${GCLOUD_PATH}
-
+                        export PATH=$PATH:${GCLOUD_PATH}:${KUBECTL_AUTH_PLUGIN}
                         gcloud auth activate-service-account --key-file="${GOOGLE_APPLICATION_CREDENTIALS}"
-
                         gcloud config set project ${GCP_PROJECT}
-
-                        gcloud run deploy ml-project-06 \
-                            --image=gcr.io/${GCP_PROJECT}/ml-project-06:latest \
-                            --platform=managed \
-                            --region=us-central1 \
-                            --allow-unauthenticated 
-                      
+                        gcloud container clusters get-credentials mlops-project-03-cluster --zone us-central1
+                        kubectl apply -f kubernetes-deployment.yaml
+                        
                         '''
                     }
                 }

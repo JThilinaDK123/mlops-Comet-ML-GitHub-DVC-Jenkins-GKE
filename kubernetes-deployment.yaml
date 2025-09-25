@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mlops-app-project-03
+  name: mlops-app-project-06
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: mlops-app-project-03
+      app: mlops-app-project-06
   template:
     metadata:
       labels:
-        app: mlops-app-project-03
+        app: mlops-app-project-06
     spec:
       containers:
-      - name: mlops-app-project-03
-        image: us-central1-docker.pkg.dev/mlops-thilina/mlops-project-03/mlops-app-project-03:latest
+      - name: mlops-app-project-06
+        image: us-central1-docker.pkg.dev/mlops-thilina/mlops-project/mlops-app-project-06:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
 
 ---
 
@@ -26,9 +26,9 @@ metadata:
   name: mlops-service
 spec:
   selector:
-    app: mlops-app-project-03
+    app: mlops-app-project-06
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 8080
   type: LoadBalancer
