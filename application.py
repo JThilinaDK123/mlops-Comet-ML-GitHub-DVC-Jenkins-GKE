@@ -2,7 +2,6 @@ import joblib
 import numpy as np
 from config.paths_config import MODEL_OUTPUT_PATH
 from flask import Flask, render_template, request, Response
-from prometheus_client import Counter, generate_latest
 import os
 
 app = Flask(__name__)
