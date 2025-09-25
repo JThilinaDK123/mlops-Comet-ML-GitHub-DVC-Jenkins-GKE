@@ -20,7 +20,7 @@ COPY . .
 # Install the package in editable mode
 RUN pip install --no-cache-dir -e .
 
-EXPOSE 5000
+EXPOSE 8080
 
 # Command to run the app
 CMD ["python", "application.py"]
