@@ -6,7 +6,7 @@ pipeline {
         GCP_PROJECT = "mlops-thilina"
         GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
         KUBECTL_AUTH_PLUGIN = "/usr/lib/google-cloud-sdk/bin"
-        IMAGE_NAME  = "us-central1-docker.pkg.dev/mlops-thilina/mlops-project/mlops-app-project-06:latest"
+        IMAGE_NAME  = "gcr.io/mlops-thilina/mlops-app-project-06:latest"
     }
 
     stages {
